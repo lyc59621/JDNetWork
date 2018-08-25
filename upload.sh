@@ -57,7 +57,9 @@ git add .
 git commit -a -m ${commitContent}
 git tag ${versionName}
 git push origin master --tags
+set the new version to versionName
+set the new tag to versionName
 
-git pull origin master && pod repo push JDNetWork.podspec --verbose --allow- #warnings --use-libraries
+git pull origin master && pod trunk push JDNetWork.podspec --verbose --allow-warnings
 
 
