@@ -45,12 +45,12 @@ git pull origin master --tags
 git stash pop
 
 
-VersionString=`grep -E 's.version.*=' JDNetWork.podspec`
+VersionString=`grep -E 's.version.*=' JDragonNetWork.podspec`
 VersionNumber=`tr -cd 0-9 <<<"$VersionString"`
 
-VersionString=`grep -E 's.version.*=' JDNetWork.podspec`
-LineNumber=`grep -nE 's.version.*=' JDNetWork.podspec | cut -d : -f1`
-sed -i "" "${LineNumber}s/${VersionNumber}/${versionName}/g" JDNetWork.podspec
+VersionString=`grep -E 's.version.*=' JDragonNetWorkpodspec`
+LineNumber=`grep -nE 's.version.*=' JDragonNetWork.podspec | cut -d : -f1`
+sed -i "" "${LineNumber}s/${VersionNumber}/${versionName}/g" JDragonNetWork.podspec
 
 
 git add .
@@ -60,6 +60,6 @@ git push origin master --tags
 set the new version to versionName
 set the new tag to versionName
 
-git pull origin master && pod trunk push JDNetWork.podspec --verbose --allow-warnings
+git pull origin master && pod trunk push JDragonNetWork.podspec --verbose --allow-warnings
 
 
