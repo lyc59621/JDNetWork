@@ -1,0 +1,7 @@
+JDNetWork.xcodeproj/xcuserdata/
+JDNetWork.xcworkspace/
+Pods/
+*.swp
+Podfile.lock
+.DS_Store
+JDNetWork.xcodeproj/project.xcworkspace/xcuserdata/
