@@ -60,6 +60,6 @@ git push origin master --tags
 set the new version to versionName
 set the new tag to versionName
 
-git pull origin master && pod trunk push JDragonNetWork.podspec --verbose --allow-warnings
+git push  origin master && pod trunk push JDragonNetWork.podspec --verbose --allow-warnings
 
 
