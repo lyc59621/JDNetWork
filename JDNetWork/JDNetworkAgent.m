@@ -198,7 +198,10 @@
                 return [self dataTaskWithHTTPMethod:@"GET" requestSerializer:requestSerializer URLString:url parameters:param error:error];
             }
         case JDRequestMethodPOST:// POST
-            return [self dataTaskWithHTTPMethod:@"POST" requestSerializer:requestSerializer URLString:url parameters:param constructingBodyWithBlock:constructingBlock error:error];
+//            return [self dataTaskWithHTTPMethod:@"POST" requestSerializer:requestSerializer URLString:url parameters:param co
+//        nstructingBodyWithBlock:constructingBlock error:error];
+      return [self dataTaskWithHTTPMethod:@"POST" requestSerializer:requestSerializer URLString:url parameters:param progress:request.uploadProgressBlock constructingBodyWithBlock:constructingBlock error:error];
+
         case JDRequestMethodHEAD:
             return [self dataTaskWithHTTPMethod:@"HEAD" requestSerializer:requestSerializer URLString:url parameters:param error:error];
         case JDRequestMethodPUT:
@@ -545,8 +548,41 @@
                                        URLString:(NSString *)URLString
                                       parameters:(id)parameters
                                            error:(NSError * _Nullable __autoreleasing *)error {
-    return [self dataTaskWithHTTPMethod:method requestSerializer:requestSerializer URLString:URLString parameters:parameters constructingBodyWithBlock:nil error:error];
+     return [self dataTaskWithHTTPMethod:method requestSerializer:requestSerializer URLString:URLString parameters:parameters progress:nil constructingBodyWithBlock:nil error:error];
 }
+/**
+ 除下载外的，其他请求任务创建方法
+ 
+ @param method 请求方法
+ @param requestSerializer 请求序列
+ @param URLString 请求url
+ @param parameters 参数
+ @param block 构造文件或富文本等上传内容，nil时不处理
+ @param error 失败参
+ @return 返回 NSURLSessionDataTask
+ */
+//- (NSURLSessionDataTask *)dataTaskWithHTTPMethod:(NSString *)method
+//                               requestSerializer:(AFHTTPRequestSerializer *)requestSerializer
+//                                       URLString:(NSString *)URLString
+//                                      parameters:(id)parameters
+//                       constructingBodyWithBlock:(nullable void (^)(id <AFMultipartFormData> formData))block
+//                                           error:(NSError * _Nullable __autoreleasing *)error {
+//    NSMutableURLRequest *request = nil;
+//
+//    if (block) {// 如果有上传内容，用此方法构造request
+//        request = [requestSerializer multipartFormRequestWithMethod:method URLString:URLString parameters:parameters constructingBodyWithBlock:block error:error];
+//    } else {// 其他请求request
+//        request = [requestSerializer requestWithMethod:method URLString:URLString parameters:parameters error:error];
+//    }
+//
+//    __block NSURLSessionDataTask *dataTask = nil;
+//    dataTask = [_manager dataTaskWithRequest:request
+//                           completionHandler:^(NSURLResponse * __unused response, id responseObject, NSError *_error) {
+//                               [self handleRequestResult:dataTask responseObject:responseObject error:_error];
+//                           }];
+//
+//    return dataTask;
+//}
 /**
  除下载外的，其他请求任务创建方法
  
@@ -562,22 +598,25 @@
                                requestSerializer:(AFHTTPRequestSerializer *)requestSerializer
                                        URLString:(NSString *)URLString
                                       parameters:(id)parameters
+                                        progress:(nullable void (^)(NSProgress *uploadProgress))progressBlock
                        constructingBodyWithBlock:(nullable void (^)(id <AFMultipartFormData> formData))block
                                            error:(NSError * _Nullable __autoreleasing *)error {
     NSMutableURLRequest *request = nil;
-
-    if (block) {// 如果有上传内容，用此方法构造request
+    if (block) { // 如果有上传内容，用此方法构造request
         request = [requestSerializer multipartFormRequestWithMethod:method URLString:URLString parameters:parameters constructingBodyWithBlock:block error:error];
-    } else {// 其他请求request
+    } else { // 其他请求request
         request = [requestSerializer requestWithMethod:method URLString:URLString parameters:parameters error:error];
     }
-
+    
     __block NSURLSessionDataTask *dataTask = nil;
-    dataTask = [_manager dataTaskWithRequest:request
-                           completionHandler:^(NSURLResponse * __unused response, id responseObject, NSError *_error) {
-                               [self handleRequestResult:dataTask responseObject:responseObject error:_error];
-                           }];
-
+    dataTask = [_manager dataTaskWithRequest:request uploadProgress:^(NSProgress * _Nonnull uploadProgress) {
+        if (progressBlock) {
+            progressBlock(uploadProgress);
+        }
+    } downloadProgress:NULL completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable _error) {
+        [self handleRequestResult:dataTask responseObject:responseObject error:_error];
+    }];
+    
     return dataTask;
 }
 

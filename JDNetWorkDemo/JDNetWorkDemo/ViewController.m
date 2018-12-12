@@ -19,7 +19,15 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
-    [JDNetworkConfig sharedConfig].debugLogEnabled = true;
+    JDNetworkConfig *config = [JDNetworkConfig sharedConfig];
+    config.debugLogEnabled = YES; // 总开关
+    config.developerLogEnabled = YES;
+    config.logHeaderInfoEnabled = true;
+    config.logResponseObjectEnabled = YES;
+    config.logResponseStringEnabled = YES;
+    config.logCacheMetaDataEnabled = NO;
+    config.logCookieEnabled = NO;
+    config.logRestfulEnabled = NO;
     TestJDNet *reg = [[TestJDNet alloc] init];
     [reg startWithCompletionBlockWithSuccess:^(__kindof JDBaseRequest * _Nonnull request) {
         

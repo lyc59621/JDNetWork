@@ -12,7 +12,7 @@
 
 
 - (NSString *)requestUrl {
-    return @"";
+      return @"https://dev.zmmovie.com/api/v1/account/mobile/verifyForIOS";
 }
 
 - (JDRequestMethod)requestMethod {
@@ -21,7 +21,7 @@
 
 - (id)requestArgument {
     return @{
-             @"mobile": @"999999",
+             @"mobile": @"17701059525",
              @"phonecode": @"86",
              @"version":@"1_0_0_1"
              };
