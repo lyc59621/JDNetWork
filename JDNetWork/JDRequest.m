@@ -16,7 +16,7 @@
 #define NSFoundationVersionNumber_With_QoS_Available NSFoundationVersionNumber_iOS_8_0
 #endif
 
-NSString *const JDRequestCacheErrorDomain = @"com.yuantiku.request.caching";
+NSString *const JDRequestCacheErrorDomain = @"com.yuantiku.JDrequest.caching";
 
 static dispatch_queue_t JDrequest_cache_writing_queue() {
     static dispatch_queue_t queue;
@@ -227,8 +227,8 @@ static dispatch_queue_t JDrequest_cache_writing_queue() {
     if ([self cacheTimeInSeconds] < 0) {
         if (error) {
 //            *error = [NSError errorWithDomain:JDRequestCacheErrorDomain code:JDRequestCacheErrorInvalidCacheTime userInfo:@{ NSLocalizedDescriptionKey:@"Invalid cache time"}];
-             *error = [NSError errorWithDomain:JDRequestCacheErrorDomain code:JDRequestCacheErrorInvalidCacheTime userInfo:@{ NSLocalizedDescriptionKey:@"缓存时间小于0，无效!"}];
-            NSString *str = [NSString stringWithFormat:@"缓存读取失败,原因: %@",*error];
+             NSError  *error = [NSError errorWithDomain:JDRequestCacheErrorDomain code:JDRequestCacheErrorInvalidCacheTime userInfo:@{ NSLocalizedDescriptionKey:@"缓存时间小于0，无效!"}];
+            NSString *str = [NSString stringWithFormat:@"缓存读取失败,原因: %@",error];
             JDNetLog(@"%@",str);
             [JDNetworkUtils sendDebugLogNotification:@{@"log":str} fromClass:self];
         }
@@ -238,9 +238,9 @@ static dispatch_queue_t JDrequest_cache_writing_queue() {
     // Try load metadata.
     // 加载元数据
     if (![self loadCacheMetadata]) {
-        *error = [NSError errorWithDomain:JDRequestCacheErrorDomain code:JDRequestCacheErrorInvalidMetadata userInfo:@{ NSLocalizedDescriptionKey:@"不可用的元数据，缓存可能不存在"}];
+      NSError  *error = [NSError errorWithDomain:JDRequestCacheErrorDomain code:JDRequestCacheErrorInvalidMetadata userInfo:@{ NSLocalizedDescriptionKey:@"不可用的元数据，缓存可能不存在"}];
         if (error) {
-            NSString *str = [NSString stringWithFormat:@"缓存读取失败,原因: %@",*error];
+            NSString *str = [NSString stringWithFormat:@"缓存读取失败,原因: %@",error];
             JDNetLog(@"%@",str);
             [JDNetworkUtils sendDebugLogNotification:@{@"log":str} fromClass:self];
 
