@@ -202,10 +202,8 @@
                 return [self dataTaskWithHTTPMethod:@"GET" requestSerializer:requestSerializer URLString:url parameters:param error:error];
             }
         case JDRequestMethodPOST:// POST
-            //            return [self dataTaskWithHTTPMethod:@"POST" requestSerializer:requestSerializer URLString:url parameters:param co
-            //        nstructingBodyWithBlock:constructingBlock error:error];
             return [self dataTaskWithHTTPMethod:@"POST" requestSerializer:requestSerializer URLString:url parameters:param progress:request.uploadProgressBlock constructingBodyWithBlock:constructingBlock error:error];
-            
+
         case JDRequestMethodHEAD:
             return [self dataTaskWithHTTPMethod:@"HEAD" requestSerializer:requestSerializer URLString:url parameters:param error:error];
         case JDRequestMethodPUT:

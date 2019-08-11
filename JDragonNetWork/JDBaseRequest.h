@@ -323,6 +323,10 @@ typedef void(^JDRequestCompletionBlock)(__kindof JDBaseRequest *request);
  */
 @property (nonatomic, copy, nullable) AFURLSessionTaskProgressBlock resumableDownloadProgressBlock;
 
+/** 上传进度回调,操作时请回主线程操作 */
+@property (nonatomic, copy, nullable) AFURLSessionTaskProgressBlock uploadProgressBlock;
+
+
 #pragma mark - ***文件上传、下载 >end
 /**
  The priority of the request. Effective only on iOS 8+. Default is `JDRequestPriorityDefault`.
