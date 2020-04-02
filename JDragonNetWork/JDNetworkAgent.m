@@ -433,7 +433,7 @@
             if (log_str.length <=0) {
                 log_str = request.responseString;
             }
-            JDNetLog(@"请求: %@ \n返回原始数据是: %@",request,log_str);
+            JDNetLog(@"请求: %@ 返回原始数据是: %@",request,log_str);
         }
         
         if ([JDNetworkConfig sharedConfig].logResponseObjectEnabled) {
@@ -442,9 +442,9 @@
             if (log_str.length <=0) {
                 log_str = request.responseString;
             }
-            JDNetLog(@"请求: %@ \n返回序列后的数据是: %@",request,log_str);
+            JDNetLog(@"请求: %@ 返回序列后的数据是: %@",request,log_str);
         }
-        [JDNetworkUtils sendDebugLogNotification:@{@"log":[NSString stringWithFormat:@"请求: %@ \n返回的数据是: %@",request,request.responseString]} fromClass:self];
+        [JDNetworkUtils sendDebugLogNotification:@{@"log":[NSString stringWithFormat:@"请求: %@ 返回的数据是: %@",request,request.responseString]} fromClass:self];
     }
     if (error) { // 请求失败
         succeed = NO;
@@ -507,6 +507,8 @@
     NSString *str = [NSString stringWithFormat:@"请求 %@ 失败, 状态码 = %ld, 错误 = %@",
                      NSStringFromClass([request class]), (long)request.responseStatusCode, error.localizedDescription];
     JDNetLog(@"%@",str);
+    JDNetLog(@"%@",[NSString stringWithFormat:@"失败请求: %@",error]);
+
     [JDNetworkUtils sendDebugLogNotification:@{@"log":str} fromClass:self];
     // Save incomplete download data.
     NSData *incompleteDownloadData = error.userInfo[NSURLSessionDownloadTaskResumeData];
