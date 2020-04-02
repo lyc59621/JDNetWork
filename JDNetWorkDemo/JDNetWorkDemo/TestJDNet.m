@@ -21,7 +21,7 @@
 
 - (id)requestArgument {
     return @{
-             @"mobile": @"17701059525",
+             @"mobile": @"18809098989",
              @"phonecode": @"86",
              @"version":@"1_0_0_1"
              };

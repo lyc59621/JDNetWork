@@ -223,9 +223,19 @@
     NSURLRequest *customUrlRequest= [request buildCustomUrlRequest];
     if (customUrlRequest) {// 如果是自定请求
         __block NSURLSessionDataTask *dataTask = nil;
-        dataTask = [_manager dataTaskWithRequest:customUrlRequest completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
-            [self handleRequestResult:dataTask responseObject:responseObject error:error];
+//        dataTask = [_manager dataTaskWithRequest:customUrlRequest completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+//            [self handleRequestResult:dataTask responseObject:responseObject error:error];
+//        }];
+        
+        dataTask = [_manager dataTaskWithRequest:customUrlRequest uploadProgress:^(NSProgress * _Nonnull uploadProgress) {
+            
+        } downloadProgress:^(NSProgress * _Nonnull downloadProgress) {
+            
+        } completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+         [self handleRequestResult:dataTask responseObject:responseObject error:error];
         }];
+        
+        
         request.requestTask = dataTask;
     } else {// 正常请求构建
         request.requestTask = [self sessionTaskForRequest:request error:&requestSerializationError];
@@ -243,20 +253,33 @@
     if ([request.requestTask respondsToSelector:@selector(priority)]) {// 如果有优先级，就设置task的优先级
         switch (request.requestPriority) {
             case JDRequestPriorityHigh:
-                request.requestTask.priority = NSURLSessionTaskPriorityHigh;
+                if (@available(iOS 8.0, *)) {
+                    request.requestTask.priority = NSURLSessionTaskPriorityHigh;
+                } else {
+                    // Fallback on earlier versions
+                }
                 break;
             case JDRequestPriorityLow:
-                request.requestTask.priority = NSURLSessionTaskPriorityLow;
+                if (@available(iOS 8.0, *)) {
+                    request.requestTask.priority = NSURLSessionTaskPriorityLow;
+                } else {
+                    // Fallback on earlier versions
+                    
+                }
                 break;
             case JDRequestPriorityDefault:
                 /*!!fall through*/
             default:
-                request.requestTask.priority = NSURLSessionTaskPriorityDefault;
+                if (@available(iOS 8.0, *)) {
+                    request.requestTask.priority = NSURLSessionTaskPriorityDefault;
+                } else {
+                    // Fallback on earlier versions
+                }
                 break;
         }
     }
     
-    JDNetLog(@"========添加请求: %@ =====", NSStringFromClass([request class]));
+    JDNetLog(@"========添加请求的类: %@============", NSStringFromClass([request class]));
     [JDNetworkUtils sendDebugLogNotification:@{@"log":[NSString stringWithFormat:@"*添加请求: %@",NSStringFromClass([request class])]} fromClass:self];
     
     JDNetLog(@"请求地址是: %@",request.currentRequest.URL);
@@ -267,8 +290,6 @@
     }
     [JDNetworkUtils sendDebugLogNotification:@{@"log":[NSString stringWithFormat:@"*发起时的cookies是: %@",[NSHTTPCookieStorage sharedHTTPCookieStorage].cookies]} fromClass:self];
     
-    // Retain request
-    JDNetLog(@"Add request: %@", NSStringFromClass([request class]));
     [self addRequestToRecord:request];// 本地记录数据
     [request.requestTask resume]; // 启动
 }
@@ -372,9 +393,9 @@
     if (!request) {// 取消/移除的不作处理
         return;
     }
-    
-    JDNetLog(@"请求完成的request: %@", NSStringFromClass([request class]));
-    [JDNetworkUtils sendDebugLogNotification:@{@"log":[NSString stringWithFormat:@"请求完成的request: %@", NSStringFromClass([request class])]} fromClass:self];
+    NSString *logStr = [NSString stringWithFormat:@"请求完成的class: %@ 请求完成的request地址: %@",NSStringFromClass([request class]),request.currentRequest.URL];
+    JDNetLog(@"%@", logStr);
+    [JDNetworkUtils sendDebugLogNotification:@{@"log":logStr} fromClass:self];
     if ([JDNetworkConfig sharedConfig].logHeaderInfoEnabled) {
         JDNetLog(@"请求返回头信息是: %@",request.responseHeaders);
     }

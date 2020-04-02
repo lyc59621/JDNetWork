@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "JDragonNetWork"
-  s.version      = "0.0.5"
+  s.version      = "0.0.6"
   s.summary      = "by---YTKNetWork"
 
   # This description is used to generate tags and improve search results.
@@ -25,7 +25,7 @@ Pod::Spec.new do |s|
   #   * Write the description between the DESC delimiters below.
   #   * Finally, don't worry about the indent, CocoaPods strips it!
   s.description  = <<-DESC
-                    this is JDragonNetWork
+                    this is JDragonNetWork 
                    DESC
 
   s.homepage     = "https://github.com/lyc59621/JDNetWork"
@@ -65,7 +65,7 @@ Pod::Spec.new do |s|
   #
 
   # s.platform     = :ios
-  s.platform     = :ios, "7.0"
+  s.platform     = :ios, "9.0"
 
   #  When using multiple platforms
   # s.ios.deployment_target = "5.0"
@@ -133,6 +133,6 @@ Pod::Spec.new do |s|
   s.requires_arc = true
 
   # s.xcconfig = { "HEADER_SEARCH_PATHS" => "$(SDKROOT)/usr/include/libxml2" }
- s.dependency 'AFNetworking', '~> 3.2.1'
+ s.dependency 'AFNetworking', '~> 4.0.0'
 
 end
